@@ -1,24 +1,45 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
-
+import {
+  Kanit_400Regular,
+  Kanit_700Bold,
+  useFonts,
+} from "@expo-google-fonts/kanit";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+ 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
+  //ตั้งค่าการใช้งาน font kanit
+  const [fontsLoaded] = useFonts({
+    Kanit_400Regular,
+    Kanit_700Bold,
+  });
+ 
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+ 
+  if (!fontsLoaded) {
+    return null;
+  }
+ 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="bmi"
+        options={{
+          title: "BMI Calculator",
+          headerStyle: { backgroundColor: "#ff8ae2" },
+          headerTitleStyle: {
+            color: "#ffffff",
+            fontFamily: "Kanit_700Bold",
+            fontSize: 24,
+          },
+          headerTitleAlign: "center",
+        }}
+      />
+    </Stack>
   );
 }
